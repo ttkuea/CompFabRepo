@@ -140,12 +140,13 @@ module pagoda_recur(lvl){
 module pagodadadadada(){
     offset_body_base = (base_w *1.05 / 10) + (base_w/10);
     offset_recur_base = offset_body_base + (base_w*0.6*0.4);
-
-    pagoda_base();
+    union(){
+        pagoda_base();
     
-    translate([0,0,offset_body_base]) pagoda_body(base_w);
+        translate([0,0,offset_body_base]) pagoda_body(base_w);
     
-    translate([0,0,offset_recur_base]) pagoda_recur(lvl_no);
+        translate([0,0,offset_recur_base]) pagoda_recur(lvl_no);
+    }
 }
 
 
