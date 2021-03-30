@@ -4,12 +4,6 @@ base_w = 30;
 // Adjust level no.
 lvl_no = 3;
 
-module elongate(){
-    for (i = [0 : $children-1]){
-            scale([10 , 1, 1 ]) child(i);
-    }
-}
-
 module prism(l, w, h){
     polyhedron(
         points=[[0,0,0], [l,0,0], [l,w,0], [0,w,0], [0,w,h], [l,w,h]],
@@ -81,7 +75,28 @@ module pagoda_body(b_w){
     }  
 }
 
-module pagoda_recur_body(b_w){
+module pagoda_top(b_w){
+    body_w = b_w * 0.1;
+    body_h = body_w * 0.1; 
+    
+    roof_w = b_w * 0.4;
+    thicc = roof_w*0.1;
+    translate([0,0,body_h*0.9]){
+            thicc = thicc * 0.4;
+            union(){
+            for (i = [1:6]){
+                translate([0,0, thicc*i]){
+                    cube([roof_w * (1-(0.1*i)),roof_w * (1-(0.1*i)),thicc],center=true);
+                }
+            } 
+            }
+            translate([0,0,thicc*20]) cube([roof_w * 0.2,roof_w * 0.2,b_w*0.9],center=true);
+    }
+    
+    
+}
+
+module pagoda_recur_body(b_w,b_h){
     body_w = b_w * 0.7;
     body_h = body_w * 0.4; 
     
@@ -93,21 +108,30 @@ module pagoda_recur_body(b_w){
         translate([0,0,body_h/2])
             cube([body_w * 0.8,body_w * 0.8, body_h], center=true);
         
-        for (i = [0:11]){
-            
+        translate([0,0,body_h*0.9]){
+            thicc = thicc * 0.2;
+            union(){
+            for (i = [1:5]){
+                translate([0,0, thicc*i]){
+                    cube([roof_w * (1-(0.1*i)),roof_w * (1-(0.1*i)),thicc],center=true);
+                }
+            } 
+            }
         }
+        
     }
 }
 
 
 // RECURSIVE
 module pagoda_recur(lvl){
-    recur_w = base_w * (0.6 - (0.05 * (lvl_no - lvl)));
+    recur_w = base_w * (1 - (0.05 * (lvl_no - lvl)));
     recur_h = base_w * 0.6;
     if (lvl) {
-        
+        pagoda_recur_body(recur_w);
+        translate([0,0,recur_h* (0.5 - (0.01 * (lvl_no-lvl)))]) pagoda_recur(lvl-1);
     } else {
-        
+        translate([0,0,recur_h*(0.03 - (0.01 * lvl_no))])pagoda_top(recur_w);
     }
 }
 
@@ -115,13 +139,14 @@ module pagoda_recur(lvl){
 // MAIN
 module pagodadadadada(){
     offset_body_base = (base_w *1.05 / 10) + (base_w/10);
-    offset_recur_base = 0;
-
-    pagoda_base();
+    offset_recur_base = offset_body_base + (base_w*0.6*0.4);
+    union(){
+        pagoda_base();
     
-    translate([0,0,offset_body_base]) pagoda_body(base_w);
+        translate([0,0,offset_body_base]) pagoda_body(base_w);
     
-    translate([0,0,30]) pagoda_recur_body(base_w);
+        translate([0,0,offset_recur_base]) pagoda_recur(lvl_no);
+    }
 }
 
 
