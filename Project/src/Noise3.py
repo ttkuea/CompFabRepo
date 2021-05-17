@@ -40,16 +40,16 @@ def generate_fractal_noise_2D(shape, res, octaves=1, persistence=0.5):
     return noise
 
 
-size = 160
-pic = generate_fractal_noise_2D((size,size),(5,5), 2)
-z = pic
-x = np.arange(-size/2,size/2)
-y = np.arange(-size/2,size/2)
-x, y = np.meshgrid(x, y)
-##plt.imshow(pic, cmap='gray')
-##plt.show()
+# size = 160
+# pic = generate_fractal_noise_2D((size,size),(5,5), 2)
+# z = pic
+# x = np.arange(-size/2,size/2)
+# y = np.arange(-size/2,size/2)
+# x, y = np.meshgrid(x, y)
+# ##plt.imshow(pic, cmap='gray')
+# ##plt.show()
 
-fig = plt.figure()
-ax = plt.axes(projection='3d')
-ax.plot_surface(x, y, z, cmap = 'viridis', edgecolor = 'none')
-plt.show()
+# fig = plt.figure()
+# ax = plt.axes(projection='3d')
+# ax.plot_surface(x, y, z, cmap = 'viridis', edgecolor = 'none')
+# plt.show()
